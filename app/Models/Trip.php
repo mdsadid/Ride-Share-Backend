@@ -18,6 +18,19 @@ class Trip extends Model
     protected $guarded = [];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_started'      => 'boolean',
+        'is_completed'    => 'boolean',
+        'origin'          => 'array',
+        'destination'     => 'array',
+        'driver_location' => 'array',
+    ];
+
+    /**
      * @return BelongsTo
      */
     public function user(): BelongsTo
