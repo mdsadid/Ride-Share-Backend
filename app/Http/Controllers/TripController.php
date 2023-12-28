@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\TripAccepted;
+use App\Events\TripCreated;
 use App\Events\TripEnded;
 use App\Events\TripLocationUpdated;
 use App\Events\TripStarted;
@@ -28,7 +29,7 @@ class TripController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validation errors occurred.',
+                'message' => 'Validation errors occurred',
                 'errors'  => $validator->errors(),
             ]);
         }
@@ -44,8 +45,10 @@ class TripController extends Controller
 
         $trip->load('user');
 
+        TripCreated::dispatch($trip);
+
         return response()->json([
-            'message' => 'Trip has been created.',
+            'message' => 'Trip has been created',
             'trip'    => new TripResource($trip),
         ], 201);
     }
@@ -72,7 +75,7 @@ class TripController extends Controller
         }
 
         return response()->json([
-            'message' => 'Cannot find this trip.'
+            'message' => 'Cannot find this trip'
         ], 404);
     }
 
@@ -161,7 +164,7 @@ class TripController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validation errors occurred.',
+                'message' => 'Validation errors occurred',
                 'errors'  => $validator->errors(),
             ]);
         }

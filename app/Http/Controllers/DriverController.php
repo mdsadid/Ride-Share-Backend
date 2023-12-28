@@ -40,9 +40,9 @@ class DriverController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validation errors occurred.',
+                'message' => 'Validation errors occurred',
                 'errors'  => $validator->errors(),
-            ]);
+            ], 422);
         }
 
         $user = $request->user();
@@ -61,7 +61,8 @@ class DriverController extends Controller
         $user->load('driver');
 
         return response()->json([
-            'data' => new UserResource($user),
+            'message' => 'Driver information has been updated',
+            'data'    => new UserResource($user),
         ], 201);
     }
 }

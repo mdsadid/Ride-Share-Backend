@@ -36,11 +36,11 @@ class LoginController extends Controller
             $user->notify(new LoginNeedsVerification());
 
             return response()->json([
-                'message' => 'A login code has been sent.'
+                'message' => 'A login code has been sent'
             ], 200);
         } catch (Exception $exception) {
             return response()->json([
-                'message' => 'Could not process a user with that phone number.',
+                'message' => 'Could not process a user with that phone number',
                 'error'   => $exception,
             ], 401);
         }
@@ -74,13 +74,13 @@ class LoginController extends Controller
             ]);
 
             return response()->json([
-                'message' => 'Verification has been successfully completed.',
+                'message' => 'Verification has been successfully completed',
                 'token'   => $user->createToken("API token of " . $request->get('phone'))->plainTextToken
             ], 200);
         }
 
         return response()->json([
-            'message' => 'Invalid verification code.'
+            'message' => 'Invalid verification code'
         ], 401);
     }
 }
