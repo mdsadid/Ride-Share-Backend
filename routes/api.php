@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\DriverController;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TripController;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,10 +23,12 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Route::prefix('v1')->group(function () {
-    Route::post('/login', [LoginController::class, 'login']);
-    Route::post('/login/verify', [LoginController::class, 'verify']);
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login/verify', [AuthController::class, 'verify']);
 
     Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+
         Route::get('/driver', [DriverController::class, 'show']);
         Route::post('/driver', [DriverController::class, 'update']);
 
@@ -37,7 +40,9 @@ Route::prefix('v1')->group(function () {
         Route::patch('/trip/{trip}/location', [TripController::class, 'location']);
 
         Route::get('/user', function (Request $request) {
-            return $request->user();
+            return response()->json([
+                'data' => new UserResource($request->user()),
+            ]);
         });
     });
 });

@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class LoginController extends Controller
+class AuthController extends Controller
 {
     /**
      * @param Request $request
@@ -74,13 +74,26 @@ class LoginController extends Controller
             ]);
 
             return response()->json([
-                'message' => 'Verification has been successfully completed',
-                'token'   => $user->createToken("API token of " . $request->get('phone'))->plainTextToken
+                'message' => 'Welcome!',
+                'token'   => $user->createToken("API token of " . $request->get('phone'))->plainTextToken,
             ], 200);
         }
 
         return response()->json([
             'message' => 'Invalid verification code'
         ], 401);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function logout(Request $request): JsonResponse
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Goodbye!'
+        ], 200);
     }
 }
