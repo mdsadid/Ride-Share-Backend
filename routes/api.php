@@ -3,8 +3,7 @@
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TripController;
-use App\Http\Resources\UserResource;
-use Illuminate\Http\Request;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,31 +17,32 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-
 Route::prefix('v1')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/login/verify', [AuthController::class, 'verify']);
+    Route::prefix('login')->group(function () {
+        Route::post('', [AuthController::class, 'login']);
+        Route::post('verify', [AuthController::class, 'verify']);
+    });
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
 
-        Route::get('/driver', [DriverController::class, 'show']);
-        Route::post('/driver', [DriverController::class, 'update']);
+        Route::prefix('driver')->group(function () {
+            Route::get('', [DriverController::class, 'show']);
+            Route::post('', [DriverController::class, 'update']);
+        });
 
-        Route::post('/trip', [TripController::class, 'store']);
-        Route::get('/trip/{trip}', [TripController::class, 'show']);
-        Route::patch('/trip/{trip}/accept', [TripController::class, 'accept']);
-        Route::patch('/trip/{trip}/start', [TripController::class, 'start']);
-        Route::patch('/trip/{trip}/end', [TripController::class, 'end']);
-        Route::patch('/trip/{trip}/location', [TripController::class, 'location']);
+        Route::prefix('trip')->group(function () {
+            Route::post('', [TripController::class, 'store']);
+            Route::get('{trip}', [TripController::class, 'show']);
+            Route::patch('{trip}/accept', [TripController::class, 'accept']);
+            Route::patch('{trip}/start', [TripController::class, 'start']);
+            Route::patch('{trip}/end', [TripController::class, 'end']);
+            Route::patch('{trip}/location', [TripController::class, 'location']);
+        });
 
-        Route::get('/user', function (Request $request) {
-            return response()->json([
-                'data' => new UserResource($request->user()),
-            ]);
+        Route::prefix('user')->group(function () {
+            Route::get('', [UserController::class, 'show']);
+            Route::patch('', [UserController::class, 'update']);
         });
     });
 });
