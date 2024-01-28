@@ -33,7 +33,7 @@ class TripCreated implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('trips'),
+            new Channel('passenger_trip'),
         ];
     }
 }

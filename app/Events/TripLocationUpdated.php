@@ -33,7 +33,7 @@ class TripLocationUpdated implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('trip'),
+            new Channel('passenger_trip'),
         ];
     }
 }
